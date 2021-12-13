@@ -10,23 +10,7 @@ import (
 	"github.com/richardlehane/mscfb"
 )
 
-func openFile(path string) (*mscfb.Reader, *os.File, error) {
-	file, _ := os.Open(path)
-	doc, err := mscfb.New(file)
-	if err != nil {
-		return nil, nil, err
-	}
-	return doc, file, nil
-}
-
-func parseAutomaticDestinationFile(path string) ([]string, error) {
-
-	doc, file, err := openFile(path)
-	if err != nil {
-		return nil, err
-	}
-	defer file.Close()
-
+func parseAutomaticDestinationFile(doc *mscfb.Reader, file *os.File) ([]string, error) {
 	for entry, err := doc.Next(); err == nil; entry, err = doc.Next() {
 		if entry.Name == "DestList" {
 			buf := make([]byte, entry.Size)
