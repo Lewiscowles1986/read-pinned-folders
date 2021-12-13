@@ -1,9 +1,19 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"os"
+	"path"
+)
 
 func main() {
-	paths, err := parseAutomaticDestinationFile("C:\\Users\\lewis\\AppData\\Roaming\\Microsoft\\Windows\\Recent\\AutomaticDestinations\\f01b4d95cf55d32a.automaticDestinations-ms")
+	homeDir, _ := os.UserHomeDir()
+	roamingDir := path.Join(homeDir, "AppData", "Roaming")
+	windowsRoamingDir := path.Join(roamingDir, "Microsoft", "Windows")
+	automaticDestinations := path.Join(windowsRoamingDir, "Recent", "AutomaticDestinations")
+	paths, err := parseAutomaticDestinationFile(
+		path.Join(automaticDestinations, "f01b4d95cf55d32a.automaticDestinations-ms"),
+	)
 	if err != nil {
 		panic(err)
 	}
