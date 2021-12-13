@@ -51,10 +51,11 @@ func parseAutomaticDestinationFile(doc *mscfb.Reader, file *os.File) ([]string, 
 
 			for dirIndex := DestinationListHeaderSize; dirIndex < len; {
 				extentsOfDir := dirIndex + StartOfPathRelativeOffset
-				pathSize := binary.LittleEndian.Uint16(
-					buf[dirIndex+PathEntryOffset : extentsOfDir])
+				pathSize := accountForWChar(
+					binary.LittleEndian.Uint16(
+						buf[dirIndex+PathEntryOffset : extentsOfDir]))
 				entrySize := int(
-					PathEntryOffset + 2 + accountForWChar(pathSize) + 4)
+					PathEntryOffset + 2 + pathSize + 4)
 
 				var dBytes = make([]byte, entrySize)
 				copy(dBytes[:], buf[dirIndex:dirIndex+entrySize])
